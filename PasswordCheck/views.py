@@ -8,5 +8,14 @@ def index(request):
 
 def evaluate_password(request):
     password = request.POST.get('password')
-    strength = request.POST.get('strength')
-    return render(request, 'PasswordCheck/check_password.html', {'password': password, 'strength': strength})
+    previous_password = request.POST.get('previous_password')
+    common_words = request.POST.get('common_words')
+    personal_information = request.POST.get('personal_information')
+    password_model = Password(password_text=password)
+    password_model.save()
+
+    if password:
+        password_model.calculate_password_attributes(previous_password, common_words, personal_information)
+        password_model.calculate_password_strength()
+
+    return render(request, 'PasswordCheck/check_password.html', {'password': password, 'strength': password_model.get_password_strength()})

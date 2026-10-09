@@ -11,12 +11,24 @@
     <div class="container mt-5 text-center">
         <h1>Password Checker</h1>
         <p>Enter a password to check its strength.</p>
-        <form method="post" class="mt-3">
+        <form action="{% url 'PasswordCheck:evaluate_password' %}" method="post" class="mt-3">
             {% csrf_token %}
             <div class="form-group row">
                 <label for="password" class="col-sm-2 col-form-label">Enter Password:</label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" id="password" name="password">
+                    <input type="password" class="form-control" id="password" name="password" maxlength="30">
+                </div>
+                <div class="col-sm-20">
+                    <input type="checkbox" id="previous_password" name="previous_password" value="True">
+                    <label for="previous_password">Password Was Used Before</label>
+                </div>
+                <div class="col-sm-20">
+                    <input type="checkbox" id="common_words" name="common_words" value="True">
+                    <label for="common_words">Password Contains Common Words</label>
+                </div>
+                <div class="col-sm-20">
+                    <input type="checkbox" id="personal_information" name="personal_information" value="True">
+                    <label for="personal_information">Password Contains Personal Information (Name, Date of Birth, etc.)</label>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Check Password</button>
