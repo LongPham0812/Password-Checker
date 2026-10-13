@@ -17,5 +17,6 @@ def evaluate_password(request):
     if password:
         password_model.calculate_password_attributes(previous_password, common_words, personal_information)
         password_model.calculate_password_strength()
+        password_model.calculate_strengths_weaknesses()
 
-    return render(request, 'PasswordCheck/check_password.html', {'password': password, 'strength': password_model.get_password_strength()})
+    return render(request, 'PasswordCheck/check_password.html', {'password': password, 'strength': password_model.get_password_strength(), 'password_strengths': password_model.get_password_strengths(), 'password_weaknesses': password_model.get_password_weaknesses()})
