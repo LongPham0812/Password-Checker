@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models.fields.files import File
 import statistics
+import re
 
 MAX_LENGTH = 30
 INITIAL_STRENGTH = 50
@@ -11,8 +13,8 @@ def default_password_attributes():
         'lowercase': 0,
         'numbers': 0,
         'special_characters': 0,
-        'previous_password': 0,
         'contains_common_words': 0,
+        'previous_password': 0,
         'contains_personal_information': 0,
     }
 
@@ -36,7 +38,6 @@ class Password(models.Model):
         return self.password_strength
 
     def calculate_password_strength(self):
-        # 0 to 100
         self.password_strength += (self.password_attributes['length'] - 9) * 5
         self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
 
@@ -59,15 +60,15 @@ class Password(models.Model):
         self.password_strength -= statistics.stdev([upper_percent, lower_percent, number_percent, symbol_percent]) * 10
         self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
 
+        if self.password_attributes['contains_common_words']:
+            self.password_strength -= 10
+            self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
+
         if self.password_attributes['previous_password']:
             self.password_strength -= 10
             self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
         
-        if self.password_attributes['common_words']:
-            self.password_strength -= 10
-            self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
-        
-        if self.password_attributes['personal_information']:
+        if self.password_attributes['contains_personal_information']:
             self.password_strength -= 10
             self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
 
@@ -79,7 +80,7 @@ class Password(models.Model):
     def get_password_attributes(self):
         return self.password_attributes
 
-    def calculate_password_attributes(self, previous_password, common_words, personal_information):
+    def calculate_password_attributes(self, previous_password, personal_information):
         self.password_attributes['length'] = len(self.password_text)
         
         for char in self.password_text:
@@ -92,9 +93,17 @@ class Password(models.Model):
             else:
                 self.password_attributes['special_characters'] += 1
 
+        with open("PasswordCheck/PasswordList", "r") as phrases_file:
+            for phrase_line in phrases_file:
+                phrase = phrase_line.strip()
+                if len(phrase) < 3:
+                    continue
+                if re.search(phrase, self.password_text, re.IGNORECASE):
+                    self.password_attributes['contains_common_words'] = 1
+                    break
+
         self.password_attributes['previous_password'] = 1 if previous_password else 0
-        self.password_attributes['common_words'] = 1 if common_words else 0
-        self.password_attributes['personal_information'] = 1 if personal_information else 0
+        self.password_attributes['contains_personal_information'] = 1 if personal_information else 0
 
     def __str__(self):
         return f"{self.password_text} {self.password_strength} {self.password_attributes}"
@@ -140,15 +149,15 @@ class Password(models.Model):
         else:
             self.password_weaknesses.append("The password does not contain any special characters (!, @, #, etc.)")
 
+        if not self.password_attributes['contains_common_words']:
+            self.password_strengths.append("The password does not contain common words or phrases")
+        else:
+            self.password_weaknesses.append("The password contains 1 or more common words or phrases")
+
         if not self.password_attributes['previous_password']:
             self.password_strengths.append("The password is new and has not been used previously")
         else:
             self.password_weaknesses.append("The password has been used previously")
-
-        if not self.password_attributes['contains_common_words']:
-            self.password_strengths.append("The password does not contain common words")
-        else:
-            self.password_weaknesses.append("The password contains 1 or more common words")
 
         if not self.password_attributes['contains_personal_information']:
             self.password_strengths.append("The password does not contain personal information (username, date of birth, etc.)")
@@ -159,5 +168,7 @@ class Password(models.Model):
         lower_percent = (self.password_attributes['lowercase'] / self.password_attributes['length'])
         number_percent = (self.password_attributes['numbers'] / self.password_attributes['length'])
         symbol_percent = (self.password_attributes['special_characters'] / self.password_attributes['length'])
-        if statistics.stdev([upper_percent, lower_percent, number_percent, symbol_percent]) > 0.75:
+        if statistics.stdev([upper_percent, lower_percent, number_percent, symbol_percent]) < 0.30:
+            self.password_strengths.append("The password contains a large variety of uppercase letters, lowercase letters, numbers, and special characters")
+        else:
             self.password_weaknesses.append("The password does not contain a large variety of uppercase letters, lowercase letters, numbers, and special characters")
