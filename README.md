@@ -218,9 +218,45 @@ Figma UI design for the project: https://www.figma.com/design/3kyZk5Y3HvFQPVGrrW
 
 ## 12. Merging Information
 
-**Check for any pending migrations:**
+### Pre-Merge Information
 
-**Run any tests:**
+1. **Check for any pending migrations:**
+
+- In Bash, type `python manage.py showmigrations | grep "\[ \]"`
+- If there are pending migrations, you will see output like `[ ]`
+- If there are no pending migrations, you will see output like `[X]`
+- If there are pending migrations, you can apply them with `python manage.py makemigrations` and `python manage.py migrate`
+
+2. **Run any tests:**
+
+- In Bash, type `python manage.py test`
+- This will run the tests and check for any errors
+
+3. **Delete expired sessions:**
+    - In Bash, type `python manage.py clearsessions`
+    - This will check for any expired sessions and delete them
+
+### Merging Information
+
+1. **Make a New Git Branch:**
+
+    - In Bash, type `git checkout -b <branch_name>`
+    - This will create a new Git branch and switch to it
+
+### Post-Merge Information
+
+1. **Pull the latest changes:**
+    - In Bash, type `git pull origin main`
+    - This will pull the latest changes from the main production branch
+
+2. **Create and apply migrations:**
+    - In Bash, type `python manage.py makemigrations`
+    - In Bash, type `python manage.py migrate`
+    - This will create and apply any migrations that are needed
+
+3. **Delete expired sessions:**
+    - In Bash, type `python manage.py clearsessions`
+    - This will check for any expired sessions and delete them
 
 ## 13. Additional Dependencies
 
