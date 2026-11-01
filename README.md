@@ -221,14 +221,12 @@ Figma UI design for the project: https://www.figma.com/design/3kyZk5Y3HvFQPVGrrW
 ### Pre-Merge Information
 
 1. **Check for any pending migrations:**
-
 - In Bash, type `python manage.py showmigrations | grep "\[ \]"`
 - If there are pending migrations, you will see output like `[ ]`
 - If there are no pending migrations, you will see output like `[X]`
 - If there are pending migrations, you can apply them with `python manage.py makemigrations` and `python manage.py migrate`
 
 2. **Run any tests:**
-
 - In Bash, type `python manage.py test`
 - This will run the tests and check for any errors
 
@@ -239,9 +237,19 @@ Figma UI design for the project: https://www.figma.com/design/3kyZk5Y3HvFQPVGrrW
 ### Merging Information
 
 1. **Make a New Git Branch:**
-
     - In Bash, type `git checkout -b <branch_name>`
     - This will create a new Git branch and switch to it
+
+2. **Pull Changes**
+    - Before committing, in Bash, type `git pull`
+    - This will ensure that all changes are accounted for before committing
+
+3. **Commit to the New Branch**
+    - In Bash, type `git add *` to add the files for the commit
+    - In Bash, type `git commit -m "<message>"` to make the commit
+
+4. **Push Changes**
+    - In Bash, type     
 
 ### Post-Merge Information
 
