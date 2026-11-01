@@ -249,7 +249,17 @@ Figma UI design for the project: https://www.figma.com/design/3kyZk5Y3HvFQPVGrrW
     - In Bash, type `git commit -m "<message>"` to make the commit
 
 4. **Push Changes**
-    - In Bash, type 
+    - In Bash, type `git push --set-upstream origin <branch_name>`
+    - This will push all changes made
+
+5. **Make a Pull Request**
+    - Go to the `Password-Checker` repository and click on the `Pull requests` tab
+    - Click on `New pull request`. Click the `compare` dropdown and select the appropriate Git branch. Click `Create pull request`
+    - Enter the appropriate information and click `Create pull request`
+
+6. **Wait for the Pull Request to be Accepted**
+    - Wait for someone to accept the pull request and merge the changes
+    - Once the pull request has been accepted, in Bash, type ``
 
 ### Post-Merge Information
 
