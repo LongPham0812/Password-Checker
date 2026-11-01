@@ -249,7 +249,7 @@ Figma UI design for the project: https://www.figma.com/design/3kyZk5Y3HvFQPVGrrW
     - In Bash, type `git commit -m "<message>"` to make the commit
 
 4. **Push Changes**
-    - In Bash, type     
+    - In Bash, type 
 
 ### Post-Merge Information
 
