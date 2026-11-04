@@ -30,9 +30,9 @@
 
 **12.** Merging Information
 
-**13.** Additional Dependencies
+**13.** Dependency Information
 
-**14.** System Highlights
+**14.** Application Highlights
 
 **15.** Video Demonstration
 
@@ -107,20 +107,21 @@ The following test data is used in the unit tests for the Password Checker appli
 ```
 "model": "PasswordCheck.Password"
 "fields": {
-    "password_text": 
-    "password_strength": 
+    "password_text": "test"
+    "password_strength": 0
     "password_attributes": {
-        "length": 0,
+        "length": 4,
         "uppercase": 0,
-        "lowercase": 0,
+        "lowercase": 4,
         "numbers": 0,
         "special_characters": 0,
-        "contains_common_words": 0,
+        "contains_common_words": 1,
         "previous_password": 0,
         "contains_personal_information": 0,
+        "variety_of_characters": 0,
     }
-    "password_strengths": []
-    "password_weaknesses": []
+    "password_strengths": ["The password contains at least 1 lowercase letter (a-z)", "The password is new and has not been used previously", "The password does not contain personal information (username, date of birth, etc.)"]
+    "password_weaknesses": ["The password is too short (less than 10 characters)", "The password does not contain any uppercase letters (A-Z)", "The password does not contain any numbers (0-9)", "The password does not contain any special characters (!, @, #, etc.)", "The password contains 1 or more common words or phrases", "The password does not contain a large variety of uppercase letters, lowercase letters, numbers, and special characters", "The password does not contain a large variety of characters"]
 }
 ```
 
@@ -129,20 +130,21 @@ The following test data is used in the unit tests for the Password Checker appli
 ```
 "model": "PasswordCheck.Password"
 "fields": {
-    "password_text": 
-    "password_strength": 
+    "password_text": "TestP@ssword123!"
+    "password_strength": 78
     "password_attributes": {
-        "length": 0,
-        "uppercase": 0,
-        "lowercase": 0,
-        "numbers": 0,
-        "special_characters": 0,
-        "contains_common_words": 0,
-        "previous_password": 0,
+        "length": 16,
+        "uppercase": 2,
+        "lowercase": 9,
+        "numbers": 3,
+        "special_characters": 2,
+        "contains_common_words": 1,
+        "previous_password": 1,
         "contains_personal_information": 0,
+        "variety_of_characters": 1,
     }
-    "password_strengths": []
-    "password_weaknesses": []
+    "password_strengths": ["The password is of sufficient length (10 characters or longer)", "The password contains at least 1 uppercase letter (A-Z)", "The password contains at least 1 lowercase letter (a-z)", "The password contains at least 1 number (0-9)", "The password contains at least 1 special character (!, @, #, etc.)", "The password does not contain personal information (username, date of birth, etc.)", "The password contains a large variety of uppercase letters, lowercase letters, numbers, and special characters", "The password contains a large variety of characters"]
+    "password_weaknesses": ["The password could be longer (up to 30 characters)", "The password contains 1 or more common words or phrases", "The password has been used previously"]
 }
 ```
 
@@ -151,20 +153,21 @@ The following test data is used in the unit tests for the Password Checker appli
 ```
 "model": "PasswordCheck.Password"
 "fields": {
-    "password_text": 
-    "password_strength": 
+    "password_text": hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+    "password_strength": 30
     "password_attributes": {
-        "length": 0,
+        "length": 30,
         "uppercase": 0,
-        "lowercase": 0,
+        "lowercase": 30,
         "numbers": 0,
         "special_characters": 0,
         "contains_common_words": 0,
         "previous_password": 0,
-        "contains_personal_information": 0,
+        "contains_personal_information": 1,
+        "variety_of_characters": 0,
     }
-    "password_strengths": []
-    "password_weaknesses": []
+    "password_strengths": ["The password is of sufficient length (10 characters or longer)", "The password contains at least 1 lowercase letter (a-z)", "The password does not contain common words or phrases", "The password is new and has not been used previously"]
+    "password_weaknesses": ["The password does not contain any uppercase letters (A-Z)", "The password does not contain any numbers (0-9)", "The password does not contain any special characters (!, @, #, etc.)", "The password contains 1 or more pieces of personal information (username, date of birth, etc.)", "The password does not contain a large variety of uppercase letters, lowercase letters, numbers, and special characters", "The password does not contain a large variety of characters"]
 }
 ```
 
@@ -173,20 +176,21 @@ The following test data is used in the unit tests for the Password Checker appli
 ```
 "model": "PasswordCheck.Password"
 "fields": {
-    "password_text": 
-    "password_strength": 
+    "password_text": 1!Aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    "password_strength": 46
     "password_attributes": {
-        "length": 0,
-        "uppercase": 0,
-        "lowercase": 0,
-        "numbers": 0,
-        "special_characters": 0,
-        "contains_common_words": 0,
+        "length": 30,
+        "uppercase": 1,
+        "lowercase": 27,
+        "numbers": 1,
+        "special_characters": 1,
+        "contains_common_words": 1,
         "previous_password": 0,
         "contains_personal_information": 0,
+        "variety_of_characters": 0,
     }
-    "password_strengths": []
-    "password_weaknesses": []
+    "password_strengths": ["The password is of sufficient length (10 characters or longer)", "The password contains at least 1 uppercase letter (A-Z)", "The password contains at least 1 lowercase letter (a-z)", "The password contains at least 1 number (0-9)", "The password contains at least 1 special character (!, @, #, etc.)", "The password is new and has not been used previously", "The password does not contain personal information (username, date of birth, etc.)"]
+    "password_weaknesses": ["The password contains 1 or more common words or phrases", "The password contains a large variety of uppercase letters, lowercase letters, numbers, and special characters", "The password does not contain a large variety of characters"]
 }
 ```
 
@@ -195,19 +199,20 @@ The following test data is used in the unit tests for the Password Checker appli
 ```
 "model": "PasswordCheck.Password"
 "fields": {
-    "password_text": 
-    "password_strength": 
+    "password_text": hS56Dw@u#U67^*Jgt2*$Jj4A!u9W1P
+    "password_strength": 100
     "password_attributes": {
-        "length": 0,
-        "uppercase": 0,
-        "lowercase": 0,
-        "numbers": 0,
-        "special_characters": 0,
+        "length": 30,
+        "uppercase": 8,
+        "lowercase": 7,
+        "numbers": 8,
+        "special_characters": 7,
         "contains_common_words": 0,
         "previous_password": 0,
         "contains_personal_information": 0,
+        "variety_of_characters": 1,
     }
-    "password_strengths": []
+    "password_strengths": ["The password is of sufficient length (10 characters or longer)", "The password contains at least 1 uppercase letter (A-Z)", "The password contains at least 1 lowercase letter (a-z)", "The password contains at least 1 number (0-9)", "The password contains at least 1 special character (!, @, #, etc.)", "The password does not contain common words or phrases", "The password is new and has not been used previously", "The password does not contain personal information (username, date of birth, etc.)", "The password contains a large variety of uppercase letters, lowercase letters, numbers, and special characters", "The password contains a large variety of characters"]
     "password_weaknesses": []
 }
 ```
@@ -259,7 +264,8 @@ Figma UI design for the project: https://www.figma.com/design/3kyZk5Y3HvFQPVGrrW
 
 6. **Wait for the Pull Request to be Accepted**
     - Wait for someone to accept the pull request and merge the changes
-    - Once the pull request has been accepted, in Bash, type ``
+    - Once the pull request has been accepted, in Bash, type `git checkout main` and `git pull`
+    - This will switch to the main branch and pull the latest changes.
 
 ### Post-Merge Information
 
@@ -276,13 +282,19 @@ Figma UI design for the project: https://www.figma.com/design/3kyZk5Y3HvFQPVGrrW
     - In Bash, type `python manage.py clearsessions`
     - This will check for any expired sessions and delete them
 
-## 13. Additional Dependencies
+## 13. Dependency Information
 
+- Django: Python web framework used to create this application
+- PyInstaller: Bundles this application and its dependencies into a single package
+- pyinstaller-hooks-contrib: Automatically installed alongside PyInstaller
 
+## 14. Application Highlights
 
-## 14. System Highlights
-
-
+- Ability to quickly enter passwords and get immediate in-depth feedback
+- In-depth evaluation and calculation of password strength
+- Hidden passwords which are never shown in plain text or saved within the application
+- Modern web architecture (Django + Bootstrap)
+- Open-source code that is easy to extend and customize
 
 ## 15. Video Demonstration
 

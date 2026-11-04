@@ -5,6 +5,7 @@ import re
 
 MAX_LENGTH = 30
 INITIAL_STRENGTH = 50
+TOTAL_CHARACTERS = 95
 
 def default_password_attributes():
     return {
@@ -16,6 +17,7 @@ def default_password_attributes():
         'contains_common_words': 0,
         'previous_password': 0,
         'contains_personal_information': 0,
+        'variety_of_characters': 0,
     }
 
 class Password(models.Model):
@@ -41,12 +43,12 @@ class Password(models.Model):
         self.password_strength += (self.password_attributes['length'] - 9) * 5
         self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
 
-        self.password_strength += (self.password_attributes['uppercase'] - 3) * 5
-        self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
-
         self.password_strength += (self.password_attributes['lowercase'] - 3) * 5
         self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
         
+        self.password_strength += (self.password_attributes['uppercase'] - 3) * 5
+        self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
+
         self.password_strength += (self.password_attributes['numbers'] - 3) * 5
         self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
         
@@ -71,6 +73,12 @@ class Password(models.Model):
         if self.password_attributes['contains_personal_information']:
             self.password_strength -= 10
             self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
+
+        if self.password_attributes['variety_of_characters']:
+            self.password_strength += 10
+        else:
+            self.password_strength -= 10
+        self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
 
         self.password_strength = round(self.password_strength)
 
@@ -104,6 +112,12 @@ class Password(models.Model):
 
         self.password_attributes['previous_password'] = 1 if previous_password else 0
         self.password_attributes['contains_personal_information'] = 1 if personal_information else 0
+
+        unique_characters = len(set(self.password_text))
+        if unique_characters / TOTAL_CHARACTERS > 0.1:
+            self.password_attributes['variety_of_characters'] = 1
+        else:
+            self.password_attributes['variety_of_characters'] = 0
 
     def __str__(self):
         return f"{self.password_text} {self.password_strength} {self.password_attributes}"
@@ -172,3 +186,8 @@ class Password(models.Model):
             self.password_strengths.append("The password contains a large variety of uppercase letters, lowercase letters, numbers, and special characters")
         else:
             self.password_weaknesses.append("The password does not contain a large variety of uppercase letters, lowercase letters, numbers, and special characters")
+
+        if self.password_attributes['variety_of_characters']:
+            self.password_strengths.append("The password contains a large variety of characters")
+        else:
+            self.password_weaknesses.append("The password does not contain a large variety of characters")
