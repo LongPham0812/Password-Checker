@@ -1,11 +1,3 @@
-
-
-https://github.com/user-attachments/assets/65742c19-eaaa-4ad3-91a9-463e1ed0e84b
-
-
-
-
-
 # Password Checker
 
 **Author:** Long Pham
@@ -306,3 +298,4 @@ Figma UI design for the project: https://www.figma.com/design/3kyZk5Y3HvFQPVGrrW
 
 ## 15. Video Demonstration
 
+https://github.com/user-attachments/assets/65742c19-eaaa-4ad3-91a9-463e1ed0e84b
