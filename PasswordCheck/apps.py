@@ -1,3 +1,7 @@
+"""
+App configuration for the Password Checker app.
+"""
+
 from django.apps import AppConfig
 
 

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Checker</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -11,6 +12,7 @@
     <div class="container mt-5 text-center">
         <h1>Password Checker</h1>
         <p>Enter a password and check its strength.</p>
+        <!-- Form to enter and submit password -->
         <form action="{% url 'PasswordCheck:evaluate_password' %}" method="post" class="mt-3">
             {% csrf_token %}
             <div class="form-group row">
@@ -18,6 +20,7 @@
                 <div class="col-sm-10">
                     <input type="password" class="form-control" id="password" name="password" maxlength="30">
                 </div>
+                <!-- Checkboxes to provide additional information about the password to the app -->
                 <div class="col-sm-20">
                     <input type="checkbox" id="previous_password" name="previous_password" value="True">
                     <label for="previous_password">Password Was Used Before</label>
@@ -30,6 +33,7 @@
             <button type="submit" class="btn btn-primary">Check Password</button>
         </form>
     </div>
+    <!-- Description of how the app works -->
     <div class="container mt-5 text-start">
         <h3 class="text-center">How It Works</h3>
         <ul>
@@ -42,6 +46,7 @@
             <li>Passwords entered on this website are not saved or used for any purposes other than evaluation.</li>
         </ul>
     </div>
+    <!-- List of criteria for the password -->
     <div class="container mt-5 text-start">
         <h3 class="text-center">Criteria</h3>
         <ul>

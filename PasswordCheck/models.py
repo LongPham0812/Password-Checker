@@ -1,3 +1,7 @@
+"""
+Models for the Password Checker app. This file contains code for the Password model.
+"""
+
 from django.db import models
 from django.db.models.fields.files import File
 import statistics
@@ -8,6 +12,7 @@ INITIAL_STRENGTH = 50
 TOTAL_CHARACTERS = 95
 
 def default_password_attributes():
+    """Returns a list of password attributes with all of the values set to 0"""
     return {
         'length': 0,
         'uppercase': 0,
@@ -21,6 +26,7 @@ def default_password_attributes():
     }
 
 class Password(models.Model):
+    """Password model containing properties and methods for the model"""
     password_text = models.CharField(max_length=MAX_LENGTH)
     password_strength = models.IntegerField(default=INITIAL_STRENGTH)
     password_attributes = models.JSONField(default=default_password_attributes)
@@ -28,21 +34,29 @@ class Password(models.Model):
     password_weaknesses = models.JSONField(default=list)
 
     def set_password_text(self, password_text):
+        """Set the value for the password text"""
         self.password_text = password_text
 
     def get_password_text(self):
+        """Get the value of the password text"""
         return self.password_text
 
     def set_password_strength(self, password_strength):
+        """Set the value for the password strength"""
         self.password_strength = password_strength
 
     def get_password_strength(self):
+        """Get the value of the password strength"""
         return self.password_strength
 
     def calculate_password_strength(self):
+        """Calculate the password strength based on the password attributes"""
         self.password_strength += (self.password_attributes['length'] - 9) * 5
         self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
 
+        # This segment is calculated based on increasing priority.
+        # Lowercase characters are lowest priority so they get calculated first.
+        # Special characters are highest priority so they get calculated last.
         self.password_strength += (self.password_attributes['lowercase'] - 3) * 5
         self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
         
@@ -55,6 +69,8 @@ class Password(models.Model):
         self.password_strength += (self.password_attributes['special_characters'] - 3) * 5
         self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
 
+        # Calculate how much variety there is in the usage of lowercase characters,
+        # uppercase characters, numbers, and special characters.
         upper_percent = (self.password_attributes['uppercase'] / self.password_attributes['length'])
         lower_percent = (self.password_attributes['lowercase'] / self.password_attributes['length'])
         number_percent = (self.password_attributes['numbers'] / self.password_attributes['length'])
@@ -62,6 +78,7 @@ class Password(models.Model):
         self.password_strength -= statistics.stdev([upper_percent, lower_percent, number_percent, symbol_percent]) * 10
         self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
 
+        # Subtract 10 from the strength score if the password contains the following attributes.
         if self.password_attributes['contains_common_words']:
             self.password_strength -= 10
             self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
@@ -74,6 +91,8 @@ class Password(models.Model):
             self.password_strength -= 10
             self.password_strength = 100 if self.password_strength > 100 else 0 if self.password_strength < 0 else self.password_strength
 
+        # Add 10 to the strength score if the password contains the following attribute.
+        # Subtract 10 if the password does not contain the following attribute.
         if self.password_attributes['variety_of_characters']:
             self.password_strength += 10
         else:
@@ -83,14 +102,18 @@ class Password(models.Model):
         self.password_strength = round(self.password_strength)
 
     def set_password_attributes(self, password_attributes):
+        """Set the values for the password attributes"""
         self.password_attributes = password_attributes
 
     def get_password_attributes(self):
+        """Get the values of the password attributes"""
         return self.password_attributes
 
     def calculate_password_attributes(self, previous_password, personal_information):
+        """Calculates the values for the password attributes"""
         self.password_attributes['length'] = len(self.password_text)
         
+        # Iterate through the password text
         for char in self.password_text:
             if char.isupper():
                 self.password_attributes['uppercase'] += 1
@@ -101,6 +124,7 @@ class Password(models.Model):
             else:
                 self.password_attributes['special_characters'] += 1
 
+        # Check for common phrases in the password
         with open("PasswordCheck/PasswordList", "r") as phrases_file:
             for phrase_line in phrases_file:
                 phrase = phrase_line.strip()
@@ -113,6 +137,7 @@ class Password(models.Model):
         self.password_attributes['previous_password'] = 1 if previous_password else 0
         self.password_attributes['contains_personal_information'] = 1 if personal_information else 0
 
+        # Check if there are a variety of characters used in the password
         unique_characters = len(set(self.password_text))
         if unique_characters / TOTAL_CHARACTERS > 0.1:
             self.password_attributes['variety_of_characters'] = 1
@@ -120,21 +145,27 @@ class Password(models.Model):
             self.password_attributes['variety_of_characters'] = 0
 
     def __str__(self):
+        """Return a string description of the password"""
         return f"{self.password_text} {self.password_strength} {self.password_attributes}"
 
     def set_password_strengths(self, password_strengths):
+        """Set the values for the password strengths list"""
         self.password_strengths = password_strengths
 
     def get_password_strengths(self):
+        """Get the values of the password strengths list"""
         return self.password_strengths
 
     def set_password_weaknesses(self, password_weaknesses):
+        """Set the values for the password weaknesses list"""
         self.password_weaknesses = password_weaknesses
 
     def get_password_weaknesses(self):
+        """Get the values of the password weaknesses list"""
         return self.password_weaknesses
 
     def calculate_strengths_weaknesses(self):
+        """Determines the lists of strengths and weaknesses for the password"""
         if self.password_attributes['length'] >= 10:
             self.password_strengths.append("The password is of sufficient length (10 characters or longer)")
 
@@ -178,6 +209,8 @@ class Password(models.Model):
         else:
             self.password_weaknesses.append("The password contains 1 or more pieces of personal information (username, date of birth, etc.)")
 
+        # Calculate how much variety there is in the usage of lowercase characters,
+        # uppercase characters, numbers, and special characters.
         upper_percent = (self.password_attributes['uppercase'] / self.password_attributes['length'])
         lower_percent = (self.password_attributes['lowercase'] / self.password_attributes['length'])
         number_percent = (self.password_attributes['numbers'] / self.password_attributes['length'])
